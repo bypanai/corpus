@@ -128,3 +128,5 @@
     @apply font-sans;
   }
 }
+
+:root { --background:#0a0a0f; --foreground:#f0eff4; --card:#111118; --card-foreground:#f0eff4; --popover:#111118; --popover-foreground:#f0eff4; --primary:#6e9fff; --primary-foreground:#0a0a0f; --secondary:#1a1a24; --secondary-foreground:#f0eff4; --muted:#1a1a24; --muted-foreground:#8b8a99; --accent:#1e2d4a; --accent-foreground:#f0eff4; --border:#2a2a38; --input:#2a2a38; --ring:#6e9fff; --radius:.5rem; }
