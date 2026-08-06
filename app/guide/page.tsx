@@ -2,4 +2,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { organs } from "@/components/anatomy/organ-data";
 import { PrimaryNav } from "@/components/PrimaryNav";
-export default function GuidePage() { return <main className="min-h-screen bg-[#f3f6fb] text-[#202733]"><PrimaryNav active="/guide" /><div className="mx-auto max-w-7xl px-5 py-14 sm:px-9 lg:px-14"><section className="pb-14"><p className="text-[11px] font-medium uppercase tracking-[.08em] text-[#8792a5]">Guided exploration</p><h1 className="mt-4 font-[family-name:var(--font-serif)] text-5xl leading-[1.02] tracking-[-.04em] sm:text-7xl">A short path through<br /><em className="font-normal text-[#657083]">each specimen.</em></h1><p className="mt-6 max-w-2xl text-[15px] leading-7 text-[#657083]">Guided exploration introduces landmark by landmark. Spatial stories connect those landmarks into a physiological journey.</p></section><section className="grid gap-4 lg:grid-cols-2">{organs.map((organ) => <article className="flex overflow-hidden rounded-lg border border-[#dbe2ec] bg-white shadow-sm transition hover:border-[#4f7fe8]/30" key={organ.id}><div className="grid w-[120px] shrink-0 place-items-center border-r border-[#dbe2ec] bg-[#eef2f7] p-3"><Image alt="" className="h-24 w-24 object-contain mix-blend-multiply" height={110} src={`/anatomy/${organ.id}/thumb.webp`} width={110} /></div><div className="flex min-w-0 flex-col justify-center p-6"><p className="font-mono text-[10px] uppercase tracking-[.06em] text-[#8792a5]">{organ.hotspots.length} landmarks · {organ.region}</p><h2 className="mt-2 text-lg font-semibold">{organ.name}</h2><p className="mt-1 text-[13px] text-[#657083]">{organ.stories[0]?.title}</p><div className="mt-4 flex flex-wrap gap-4 text-[13px] font-medium"><Link className="text-[#4f7fe8] hover:text-[#202733]" href={`/anatomy?organ=${organ.id}&mode=guide`}>Guided exploration →</Link><Link className="text-[#657083] hover:text-[#202733]" href={`/anatomy?organ=${organ.id}&mode=story`}>Spatial story →</Link></div></div></article>)}</section><footer className="mt-14 border-t border-[#dbe2ec] pt-7 text-center text-[13px] text-[#8792a5]">Begin with a guided path, then explore freely.</footer></div></main>; }
+
+export const metadata = {
+  title: "Guided Exploration",
+  description: "Follow landmark-by-landmark tours and spatial physiological journeys through 3D human anatomy.",
+};
+
+export default function GuidePage() {
+  return (
+    <main className="min-h-screen bg-[#f3f6fb] text-[#202733]">
+      <PrimaryNav active="/guide" />
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-9 lg:px-14">
+        <section className="pb-14">
+          <p className="text-[11px] font-medium uppercase tracking-[.08em] text-[#8792a5]">Guided exploration</p>
+          <h1 className="mt-4 font-[family-name:var(--font-serif)] text-5xl leading-[1.02] tracking-[-.04em] sm:text-7xl">
+            A short path through<br />
+            <em className="font-normal text-[#657083]">each specimen.</em>
+          </h1>
+          <p className="mt-6 max-w-2xl text-[15px] leading-7 text-[#657083]">
+            Guided exploration introduces landmark by landmark. Spatial stories connect those landmarks into a physiological journey.
+          </p>
+        </section>
+        <section className="grid gap-4 lg:grid-cols-2">
+          {organs.map((organ) => (
+            <article className="flex overflow-hidden rounded-lg border border-[#dbe2ec] bg-white shadow-sm transition hover:border-[#4f7fe8]/30" key={organ.id}>
+              <div className="grid w-[120px] shrink-0 place-items-center border-r border-[#dbe2ec] bg-[#eef2f7] p-3">
+                <Image alt="" className="h-24 w-24 object-contain mix-blend-multiply" height={110} src={`/anatomy/${organ.id}/thumb.webp`} width={110} />
+              </div>
+              <div className="flex min-w-0 flex-col justify-center p-6">
+                <p className="font-mono text-[10px] uppercase tracking-[.06em] text-[#8792a5]">{organ.hotspots.length} landmarks · {organ.region}</p>
+                <h2 className="mt-2 text-lg font-semibold">{organ.name}</h2>
+                <p className="mt-1 text-[13px] text-[#657083]">{organ.stories[0]?.title}</p>
+                <div className="mt-4 flex flex-wrap gap-4 text-[13px] font-medium">
+                  <Link className="text-[#4f7fe8] hover:text-[#202733]" href={`/anatomy?organ=${organ.id}&mode=guide`}>Guided exploration →</Link>
+                  <Link className="text-[#657083] hover:text-[#202733]" href={`/anatomy?organ=${organ.id}&mode=story`}>Spatial story →</Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+        <footer className="mt-14 border-t border-[#dbe2ec] pt-7 text-center text-[13px] text-[#8792a5]">Begin with a guided path, then explore freely.</footer>
+      </div>
+    </main>
+  );
+}

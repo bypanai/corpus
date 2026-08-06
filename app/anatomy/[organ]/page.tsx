@@ -36,7 +36,7 @@ export default async function OrganPage({ params }: PageProps) {
           <p className="text-xs font-bold uppercase tracking-[.2em] text-[#4f7fe8]">{organ.system} · {organ.region}</p>
           <h1 className="mt-4 font-[family-name:var(--font-serif)] text-6xl leading-none tracking-[-.055em]">{organ.name}</h1>
           <p className="mt-5 max-w-2xl font-[family-name:var(--font-serif)] text-xl leading-8 text-[#4f5969]">{organ.description}</p>
-          <p className="mt-5 text-sm text-[#657083]">Reviewed educational anatomy content · <a className="underline decoration-[#a9b8d0] underline-offset-4" href={organ.contentSource.href} rel="noreferrer" target="_blank">{organ.contentSource.label}</a></p>
+          <p className="mt-5 text-sm text-[#657083]">Sourced educational anatomy reference · <a className="underline decoration-[#a9b8d0] underline-offset-4" href={organ.contentSource.href} rel="noreferrer" target="_blank">{organ.contentSource.label}</a></p>
           <Link className="mt-8 inline-flex rounded-full bg-[#202733] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#4f7fe8]" href={`/anatomy?organ=${organ.id}`}>Explore {organ.name} in 3D</Link>
         </div>
       </article>

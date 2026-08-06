@@ -11,9 +11,10 @@ export function AnatomyRouteClient() {
   const requestedMode = searchParams.get("mode");
   const initialExperience = requestedMode === "guide" || requestedMode === "story" ? requestedMode : undefined;
   const initialLandmarkId = searchParams.get("landmark") ?? undefined;
-  const initialStoryStep = Number(searchParams.get("step"));
+  const requestedStep = searchParams.get("step");
+  const initialStoryStep = requestedStep !== null ? Number(requestedStep) : undefined;
   const initialRelationshipFromId = searchParams.get("from") ?? undefined;
   const initialRelationshipToId = searchParams.get("to") ?? undefined;
 
-  return <AnatomyWorkspace key={`${initialOrganId}-${initialExperience ?? "explore"}-${initialLandmarkId ?? ""}-${initialStoryStep ?? ""}-${initialRelationshipFromId ?? ""}-${initialRelationshipToId ?? ""}`} initialExperience={initialExperience} initialLandmarkId={initialLandmarkId} initialOrganId={initialOrganId} initialRelationshipFromId={initialRelationshipFromId} initialRelationshipToId={initialRelationshipToId} initialStoryStep={Number.isFinite(initialStoryStep) ? initialStoryStep : undefined} />;
+  return <AnatomyWorkspace key={`${initialOrganId}-${initialExperience ?? "explore"}-${initialLandmarkId ?? ""}-${requestedStep ?? ""}-${initialRelationshipFromId ?? ""}-${initialRelationshipToId ?? ""}`} initialExperience={initialExperience} initialLandmarkId={initialLandmarkId} initialOrganId={initialOrganId} initialRelationshipFromId={initialRelationshipFromId} initialRelationshipToId={initialRelationshipToId} initialStoryStep={Number.isFinite(initialStoryStep ?? NaN) ? initialStoryStep : undefined} />;
 }

@@ -52,9 +52,9 @@ function FloatingLights() {
 export default function Scene() {
   return (
     <div className="relative h-full min-h-[520px] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/95 shadow-2xl shadow-slate-950/40">
-      <Canvas shadows dpr={[1, 2]} className="h-full w-full">
-        <color attach="background" args={["#020817"]} />
-        <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading />}>
+        <Canvas shadows dpr={[1, 2]} className="h-full w-full">
+          <color attach="background" args={["#020817"]} />
           <PerspectiveCamera makeDefault fov={42} position={[0, 1.8, 5]} />
           <ambientLight intensity={0.32} />
           <directionalLight intensity={0.9} position={[4, 5, 2]} />
@@ -62,9 +62,9 @@ export default function Scene() {
           <FloatingLights />
           <Environment preset="city" />
           <ContactShadows position={[0, -1.4, 0]} opacity={0.5} scale={16} blur={2.8} far={4} />
-        </Suspense>
-        <OrbitControls enablePan={false} minDistance={3} maxDistance={8} maxPolarAngle={Math.PI / 2.4} />
-      </Canvas>
+          <OrbitControls enablePan={false} minDistance={3} maxDistance={8} maxPolarAngle={Math.PI / 2.4} />
+        </Canvas>
+      </Suspense>
     </div>
   )
 }
