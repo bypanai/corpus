@@ -20,11 +20,6 @@ type AnatomyModelProps = {
   onStructureSelect?: (selection: StructureSelection | null) => void;
 };
 
-function readableMeshName(mesh: Mesh) {
-  const name = mesh.name.replace(/[_-]+/g, " ").replace(/\d+/g, "").trim();
-  return name && !/^mesh$/i.test(name) ? name.replace(/\b\w/g, (letter) => letter.toUpperCase()) : "Model surface";
-}
-
 export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focusMode, organ, relatedHotspotIds = [], showLabels, onStructureSelect }: AnatomyModelProps) {
   const { scene } = useGLTF(organ.model, false, true);
   const pivotRef = useRef<Group>(null);
@@ -34,7 +29,6 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
   const [selectedHotspotId, setSelectedHotspotId] = useState<string | null>(null);
   const [hoveredHotspotId, setHoveredHotspotId] = useState<string | null>(null);
   const [hasMarkerInteraction, setHasMarkerInteraction] = useState(false);
-  const [selectedNode, setSelectedNode] = useState<Mesh | null>(null);
 
   useLayoutEffect(() => {
     const bounds = new Box3().setFromObject(model);
@@ -54,16 +48,15 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
       materials.forEach((material) => {
         if (!("emissive" in material) || !(material.emissive instanceof Color)) return;
         if (!originalEmissive.current.has(material)) originalEmissive.current.set(material, material.emissive.clone());
-        material.emissive.copy(mesh === selectedNode ? new Color("#9f3f46") : originalEmissive.current.get(material)!);
+        material.emissive.copy(originalEmissive.current.get(material)!);
       });
     });
-  }, [model, selectedNode]);
+  }, [model]);
 
   useLayoutEffect(() => {
     model.traverse((object) => {
       const mesh = object as Mesh;
       if (!mesh.isMesh) return;
-      mesh.visible = focusMode !== "isolate" || mesh === selectedNode;
       if (!mesh.material) return;
       const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       materials.forEach((material) => {
@@ -78,7 +71,7 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
         material.needsUpdate = true;
       });
     });
-  }, [focusMode, model, selectedNode]);
+  }, [focusMode, model]);
 
   useLayoutEffect(() => {
     model.traverse((object) => {
@@ -95,7 +88,6 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
 
   const clearSelection = useCallback(() => {
     setSelectedHotspotId(null);
-    setSelectedNode(null);
     onStructureSelect?.(null);
   }, [onStructureSelect]);
 
@@ -109,17 +101,6 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
     <group ref={pivotRef} rotation={[0.05, -0.28, 0]}>
       <primitive
         object={model}
-        onClick={(event: { stopPropagation: () => void; object: Mesh }) => {
-          event.stopPropagation();
-          const next = selectedNode === event.object ? null : event.object;
-          setSelectedNode(next);
-          setSelectedHotspotId(null);
-          onStructureSelect?.(next ? {
-            name: readableMeshName(next),
-            detail: "This model surface is selected. Named anatomical labels are available at highlighted reference points.",
-            source: "model",
-          } : null);
-        }}
         onPointerMissed={clearSelection}
       />
       {organ.hotspots.map((hotspot) => {
@@ -143,7 +124,6 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
                   const next = selected ? null : hotspot.id;
                   setHasMarkerInteraction(true);
                   setSelectedHotspotId(next);
-                  setSelectedNode(null);
                   onStructureSelect?.(next ? { id: hotspot.id, name: hotspot.label, detail: hotspot.detail, source: "hotspot" } : null);
                 }}
               >

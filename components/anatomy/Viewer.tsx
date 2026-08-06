@@ -2,7 +2,7 @@
 
 import { Html, PerformanceMonitor, PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Expand, EyeOff, Focus, RotateCcw, ScanSearch, Tag } from "lucide-react";
+import { Expand, EyeOff, RotateCcw, ScanSearch, Tag } from "lucide-react";
 import { forwardRef, Suspense, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Plane, Vector3 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -35,7 +35,6 @@ export const Viewer = forwardRef<AnatomyViewerHandle, { activeHotspotId?: string
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [resetToken, setResetToken] = useState(0);
   const [focusMode, setFocusMode] = useState<FocusMode>("normal");
-  const [canIsolate, setCanIsolate] = useState(false);
   const [status, setStatus] = useState("Auto-rotation is on.");
   const [renderQuality, setRenderQuality] = useState<RenderQuality>(QUALITY_TIERS[0]);
   const [sectionAxis, setSectionAxis] = useState<SectionAxis | null>(null);
@@ -52,7 +51,6 @@ export const Viewer = forwardRef<AnatomyViewerHandle, { activeHotspotId?: string
     setFocusMode("normal");
     setSectionAxis(null);
     setSectionPosition(0);
-    setCanIsolate(false);
     setStatus("View and selection reset.");
   };
 
@@ -88,19 +86,9 @@ export const Viewer = forwardRef<AnatomyViewerHandle, { activeHotspotId?: string
         return next;
       });
     }
-    if (action === "toggle-isolate") {
-      if (!canIsolate) return setStatus("Select a model surface before isolating it.");
-      setFocusMode((mode) => {
-        const next = mode === "isolate" ? "normal" : "isolate";
-        setStatus(next === "isolate" ? "Selected model surface isolated." : "Full specimen restored.");
-        return next;
-      });
-    }
   };
 
   const handleStructureSelection = (selection: StructureSelection | null) => {
-    setCanIsolate(selection?.source === "model");
-    if (selection?.source !== "model" && focusMode === "isolate") setFocusMode("normal");
     onStructureSelect?.(selection);
   };
 
@@ -151,7 +139,6 @@ export const Viewer = forwardRef<AnatomyViewerHandle, { activeHotspotId?: string
         <ViewerButton accessibleLabel={autoRotate ? "Pause auto-rotation" : "Start auto-rotation"} active={autoRotate} label="Rotate" onClick={() => run("toggle-auto-rotate")}><RotateCcw size={18} /></ViewerButton>
         <ViewerButton accessibleLabel={hasLabels ? "Toggle reference labels" : `No reference labels available for ${organ.name}`} active={showLabels} disabled={!hasLabels} label="Labels" onClick={() => run("toggle-labels")}><Tag size={18} /></ViewerButton>
         <ViewerButton accessibleLabel={focusMode === "fade" ? "Restore specimen opacity" : "Fade specimen to emphasise reference points"} active={focusMode === "fade"} label="Fade" onClick={() => run("toggle-fade")}><EyeOff size={18} /></ViewerButton>
-        <ViewerButton accessibleLabel={canIsolate ? (focusMode === "isolate" ? "Restore full specimen" : "Isolate selected model surface") : "Select a model surface to enable isolate"} active={focusMode === "isolate"} disabled={!canIsolate} label="Isolate" onClick={() => run("toggle-isolate")}><Focus size={18} /></ViewerButton>
         <ViewerButton accessibleLabel={sectionAxis ? "Close cross-section controls" : "Open cross-section controls"} active={Boolean(sectionAxis)} label="Section" onClick={() => setSectionAxis((axis) => axis ? null : "axial")}><ScanSearch size={18} /></ViewerButton>
         <ViewerButton accessibleLabel="Reset camera, model orientation, and selection" label="Reset" onClick={() => run("reset")}><ScanSearch size={18} /></ViewerButton>
         <ViewerButton accessibleLabel={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"} active={isFullscreen} label="Fullscreen" onClick={() => run("toggle-fullscreen")}><Expand size={18} /></ViewerButton>
@@ -164,7 +151,7 @@ export const Viewer = forwardRef<AnatomyViewerHandle, { activeHotspotId?: string
         </div>
         <label>Plane position <input aria-label="Cross-section plane position" type="range" min="-2" max="2" step="0.02" value={sectionPosition} onChange={(event) => setSectionPosition(Number(event.target.value))} /></label>
       </div>}
-      <div className="viewer-caption"><span>Interactive 3D specimen</span><strong>{organ.name}</strong></div>
+      <div className="viewer-caption"><span>Interactive 3D reference specimen</span><strong>{organ.name}</strong></div>
       <p aria-live="polite" className="viewer-status" role="status">{status}</p>
       <button className="auto-rotate" type="button" onClick={() => run("toggle-auto-rotate")} aria-pressed={autoRotate}><RotateCcw size={14} /> Auto rotate <i className={autoRotate ? "on" : ""} /></button>
     </section>

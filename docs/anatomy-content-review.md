@@ -2,7 +2,7 @@
 
 ## Scope
 
-The first released landmark set covers the nine GLB specimens currently shipped by Corpus. Landmark coordinates are migrated from the anatomy project's authored model metadata and use the same normalized scene size. The short explanations in `components/anatomy/organ-data.ts` were reviewed against the sources below on 2026-08-06.
+The first released landmark set covers the nine GLB reference specimens currently shipped by Corpus. The landmark coordinates are curated display overlays in the normalized viewer scene; they are not embedded named structures in the source GLB files. The short explanations in `components/anatomy/organ-data.ts` were reviewed against the sources below on 2026-08-06.
 
 These landmarks are educational orientation aids. They are not surgical navigation data, diagnostic advice, or a substitute for a clinically reviewed atlas.
 
@@ -27,3 +27,5 @@ Before additional landmarks are published, verify both conditions:
 
 1. The structure is visible and unambiguous in the exact shipped model and view.
 2. Its concise explanation is checked against an authoritative anatomy source and, for detailed clinical material, reviewed by a qualified anatomy educator or clinician.
+
+For actual per-structure selection, isolation, or layer controls, use a documented segmented model asset such as the BodyParts3D regional models, rather than representing a hotspot overlay as a selectable mesh.

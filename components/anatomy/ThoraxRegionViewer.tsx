@@ -61,15 +61,17 @@ export function ThoraxRegionViewer() {
   }, []);
   const togglePart = (part: PartId) => setVisibleParts((current) => current.includes(part) ? current.filter((id) => id !== part) : [...current, part]);
   const restore = () => { setVisibleParts(PARTS.map((part) => part.id)); setIsolated(false); };
+  const visibleCount = visibleParts.length;
 
   return <section className="region-viewer-shell" aria-label="Interactive segmented thorax model">
     <div className="region-viewer-copy">
       <p className="atelier-kicker">Regional model · thorax</p>
       <h1>See the chest as connected structures.</h1>
-      <p>A segmented thorax systems model with independently controlled rib cage, heart, bronchial trees and trachea. Rotate, zoom and use the controls to understand their spatial relationship.</p>
+      <p>A segmented thorax systems model with independently controlled rib cage, heart, bronchial trees and trachea. Rotate, zoom, hide surrounding structures, then isolate the selection to understand their spatial relationship.</p>
       <div className="region-part-controls" aria-label="Thorax structure controls">
         {PARTS.map((part) => <button key={part.id} className={visibleParts.includes(part.id) ? "active" : ""} onClick={() => togglePart(part.id)} aria-pressed={visibleParts.includes(part.id)}><i style={{ background: part.color }} />{part.label}</button>)}
       </div>
+      <p className="region-selection-status" aria-live="polite"><b>{visibleCount}</b> of {PARTS.length} structures selected{isolated ? " · surrounding structures hidden" : " · surrounding structures faded"}</p>
       <div className="region-actions"><button onClick={() => setIsolated((value) => !value)} aria-pressed={isolated}>{isolated ? "Show surrounding structures" : "Isolate selected structures"}</button><button onClick={restore}>Restore thorax</button></div>
       <p className="region-attribution">Model derived from <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html" target="_blank" rel="noreferrer">BodyParts3D, DBCLS</a> · CC BY-SA 2.1 JP.</p>
     </div>

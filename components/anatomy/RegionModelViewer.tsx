@@ -15,20 +15,23 @@ export const regionalModels = {
 type RegionKey = keyof typeof regionalModels;
 type Part = (typeof regionalModels)[RegionKey]["parts"][number];
 
-function PartMesh({ part, active }: { part: Part; active: boolean }) {
+function PartMesh({ isolated, part, selected }: { isolated: boolean; part: Part; selected: boolean }) {
   const { scene } = useGLTF(`/models/regions/${part.id}.glb`, false, false, (loader) => loader.setMeshoptDecoder(MeshoptDecoder));
   const model = useMemo(() => scene.clone(true), [scene]);
-  useLayoutEffect(() => { model.traverse((node) => { if ((node as Mesh).isMesh) { const mesh = node as Mesh; mesh.visible = active; mesh.material = new MeshStandardMaterial({ color: new Color(part.color), roughness: 0.6 }); } }); }, [active, model, part.color]);
+  useLayoutEffect(() => { model.traverse((node) => { if ((node as Mesh).isMesh) { const mesh = node as Mesh; mesh.visible = isolated ? selected : true; mesh.material = new MeshStandardMaterial({ color: new Color(part.color), roughness: 0.6, transparent: !selected, opacity: selected ? 1 : 0.12, depthWrite: selected }); } }); }, [isolated, model, part.color, selected]);
   return <primitive object={model} />;
 }
 
-function Scene({ parts, visible }: { parts: readonly Part[]; visible: string[] }) {
+function Scene({ isolated, parts, selected }: { isolated: boolean; parts: readonly Part[]; selected: string[] }) {
   const content = useRef<Group>(null);
   useLayoutEffect(() => { if (!content.current) return; const bounds = new Box3().setFromObject(content.current); const size = bounds.getSize(new Vector3()); const center = bounds.getCenter(new Vector3()); const scale = 4 / Math.max(size.x, size.y, size.z, 0.001); content.current.scale.setScalar(scale); content.current.position.copy(center.multiplyScalar(-scale)); }, []);
-  return <group ref={content}>{parts.map((part) => <PartMesh key={part.id} part={part} active={visible.includes(part.id)} />)}</group>;
+  return <group ref={content}>{parts.map((part) => <PartMesh key={part.id} part={part} selected={selected.includes(part.id)} isolated={isolated} />)}</group>;
 }
 
 export function RegionModelViewer({ region }: { region: RegionKey }) {
-  const config = regionalModels[region]; const [visible, setVisible] = useState<string[]>(config.parts.map((part) => part.id));
-  return <section className="region-viewer-shell"><div className="region-viewer-copy"><p className="atelier-kicker">Regional model · {config.title}</p><h1>{config.title}, in connected layers.</h1><p>{config.description}</p><div className="region-part-controls">{config.parts.map((part) => <button key={part.id} className={visible.includes(part.id) ? "active" : ""} onClick={() => setVisible((current) => current.includes(part.id) ? current.filter((id) => id !== part.id) : [...current, part.id])}><i style={{ background: part.color }} />{part.label}</button>)}</div><div className="region-actions"><button onClick={() => setVisible(config.parts.map((part) => part.id))}>Restore region</button></div><p className="region-attribution">Model derived from <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html" target="_blank" rel="noreferrer">BodyParts3D, DBCLS</a> · CC BY-SA 2.1 JP.</p></div><div className="region-canvas-wrap"><Canvas camera={{ position: [0, .4, 8], fov: 35 }} dpr={[1, 1.35]} gl={{ powerPreference: "high-performance" }}><color attach="background" args={["#fcf7f0"]} /><ambientLight intensity={1.8} /><directionalLight intensity={2.2} position={[5, 7, 5]} /><Suspense fallback={null}><Scene parts={config.parts} visible={visible} /></Suspense><OrbitControls enableDamping /></Canvas></div></section>;
+  const config = regionalModels[region];
+  const [selected, setSelected] = useState<string[]>(config.parts.map((part) => part.id));
+  const [isolated, setIsolated] = useState(false);
+  const restore = () => { setSelected(config.parts.map((part) => part.id)); setIsolated(false); };
+  return <section className="region-viewer-shell" aria-label={`Interactive segmented ${config.title.toLowerCase()} model`}><div className="region-viewer-copy"><p className="atelier-kicker">Regional model · {config.title}</p><h1>{config.title}, in connected layers.</h1><p>{config.description} Select structures to keep in view, then isolate them to remove surrounding anatomy completely.</p><div className="region-part-controls" aria-label={`${config.title} structure controls`}>{config.parts.map((part) => <button key={part.id} className={selected.includes(part.id) ? "active" : ""} onClick={() => setSelected((current) => current.includes(part.id) ? current.filter((id) => id !== part.id) : [...current, part.id])} aria-pressed={selected.includes(part.id)}><i style={{ background: part.color }} />{part.label}</button>)}</div><p className="region-selection-status" aria-live="polite"><b>{selected.length}</b> of {config.parts.length} structures selected{isolated ? " · surrounding structures hidden" : " · surrounding structures faded"}</p><div className="region-actions"><button onClick={() => setIsolated((value) => !value)} aria-pressed={isolated}>{isolated ? "Show surrounding structures" : "Isolate selected structures"}</button><button onClick={restore}>Restore region</button></div><p className="region-attribution">Model derived from <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html" target="_blank" rel="noreferrer">BodyParts3D, DBCLS</a> · CC BY-SA 2.1 JP.</p></div><div className="region-canvas-wrap"><Canvas camera={{ position: [0, .4, 8], fov: 35 }} dpr={[1, 1.35]} gl={{ powerPreference: "high-performance" }}><color attach="background" args={["#fcf7f0"]} /><ambientLight intensity={1.8} /><directionalLight intensity={2.2} position={[5, 7, 5]} /><Suspense fallback={null}><Scene parts={config.parts} selected={selected} isolated={isolated} /></Suspense><OrbitControls enableDamping /></Canvas></div></section>;
 }

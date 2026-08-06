@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, BadgeCheck, Bookmark, BookOpen, Check, Compass, ExternalLink, GitCompareArrows, LibraryBig, Route, Search, Share2, Stethoscope, X, Zap } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, Bookmark, BookOpen, Check, Compass, ExternalLink, GitCompareArrows, Layers3, LibraryBig, Route, Search, Share2, Stethoscope, X, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState, type CSSProperties, type KeyboardEvent } from "react";
@@ -141,9 +141,6 @@ export function AnatomyWorkspace({ initialExperience, initialLandmarkId, initial
       if (index >= 0 && guideActive) setGuideIndex(index);
       const storyPosition = activeStory?.steps.findIndex((step) => step.hotspotId === selection.id) ?? -1;
       if (storyPosition >= 0 && storyActive) setStoryIndex(storyPosition);
-    } else if (selection?.source === "model") {
-      setGuideActive(false);
-      setStoryActive(false);
     }
   };
   const visibleFacts = showAllFacts ? selectedOrgan.facts : selectedOrgan.facts.slice(0, 3);
@@ -169,7 +166,6 @@ export function AnatomyWorkspace({ initialExperience, initialLandmarkId, initial
       { label: "Restore complete specimen", detail: "Reset camera, visibility, and selection", action: "reset", keywords: "restore reset complete specimen" },
       { label: "Start guided exploration", detail: `Explore ${selectedOrgan.name} landmark by landmark`, action: "guide", keywords: "guide guided explore" },
       { label: "Start spatial story", detail: `Follow ${selectedOrgan.name} through a relationship journey`, action: "story", keywords: "story blood air bile urine journey" },
-      { label: "Isolate selected surface", detail: "Available after selecting a 3D model surface", action: "toggle-isolate", keywords: "isolate surface" },
     ];
     actions.forEach((item) => {
       if (!needle || `${item.label} ${item.keywords}`.toLowerCase().includes(needle)) results.push({ id: `action-${item.action}`, kind: "action", label: item.label, detail: item.detail, action: item.action });
@@ -207,7 +203,7 @@ export function AnatomyWorkspace({ initialExperience, initialLandmarkId, initial
     <main className="atelier-shell">
       <header className="atelier-topbar">
         <div className="atelier-brand"><strong>Corpus<sup>✦</sup></strong><em>Visual anatomy, without clutter</em></div>
-        <nav className="atelier-nav" aria-label="Primary navigation"><Link aria-current="page" className="active" href="/anatomy"><Compass size={17} />Explore</Link><Link href="/library"><LibraryBig size={17} />Library</Link><Link href="/guide"><BookOpen size={17} />Guide</Link></nav>
+        <nav className="atelier-nav" aria-label="Primary navigation"><Link aria-current="page" className="active" href="/anatomy"><Compass size={17} />Explore</Link><Link href="/library"><LibraryBig size={17} />Library</Link><Link href="/regions"><Layers3 size={17} />Regions</Link><Link href="/guide"><BookOpen size={17} />Guide</Link></nav>
         <div className="atelier-commandbar"><label className="atelier-search"><Search size={16} /><input value={query} onFocus={() => setCommandOpen(true)} onKeyDown={handleCommandKeyDown} onChange={(event) => searchOrgans(event.target.value)} placeholder="Search anatomy or type a command" role="combobox" aria-expanded={commandOpen} aria-controls="anatomy-commands" aria-activedescendant={commandResults[commandIndex] ? `command-${commandResults[commandIndex].id}` : undefined} /></label>{commandOpen && <div className="atelier-command-results" id="anatomy-commands" role="listbox">{commandResults.length ? commandResults.map((result, index) => <button id={`command-${result.id}`} aria-selected={index === commandIndex} className={result.kind === "unavailable" ? "unavailable" : ""} key={result.id} role="option" type="button" onMouseDown={(event) => event.preventDefault()} onClick={() => result.kind !== "unavailable" && runCommand(result)}><span><b>{result.label}</b><small>{result.detail}</small></span>{result.kind === "action" ? <Zap size={14} /> : <ArrowRight size={14} />}</button>) : <p>No matching organs, landmarks, regions, or commands.</p>}</div>}</div>
         <div className="atelier-share-controls"><button type="button" onClick={saveBookmark} title="Save this view"><Bookmark size={15} /> Save</button><button type="button" onClick={() => void copyShareLink()} title="Copy a link to this view">{shareStatus === "Link copied" ? <Check size={15} /> : <Share2 size={15} />} Share</button><button type="button" aria-expanded={bookmarksOpen} onClick={() => setBookmarksOpen((value) => !value)} title="Open saved views">Bookmarks</button>{bookmarksOpen && <div className="atelier-bookmarks">{bookmarks.length ? bookmarks.map((bookmark) => <a key={bookmark.href} href={bookmark.href}>{bookmark.label}</a>) : <p>Save an organ, landmark, story step, or relationship to return here.</p>}</div>}</div>
         <span className="atelier-model-count" aria-label={`${organs.length} anatomy models available`}>{organs.length} models</span>
@@ -257,6 +253,13 @@ export function AnatomyWorkspace({ initialExperience, initialLandmarkId, initial
             <span><BadgeCheck size={14} /> Reviewed anatomy content</span>
             <a href={selectedOrgan.contentSource.href} target="_blank" rel="noreferrer"><span>Source</span>{selectedOrgan.contentSource.label}<ExternalLink size={12} aria-hidden="true" /></a>
           </div>
+          {selectedOrgan.region === "Thorax" && <Link className="atelier-segmented-link" href="/regions/thorax">Explore the segmented thorax model <ArrowRight size={14} /></Link>}
+          {!selectedStructure && <section className="atelier-clinical-focus" aria-label={`${selectedOrgan.name} spatial clinical lens`}>
+            <span>Spatial clinical lens</span>
+            <h2>{selectedOrgan.clinicalFocus.title}</h2>
+            <p>{selectedOrgan.clinicalFocus.summary}</p>
+            <p className="atelier-clinical-focus-prompt"><b>Try this view</b>{selectedOrgan.clinicalFocus.prompt}</p>
+          </section>}
           {selectedProfile && selectedStructure && <section className="atelier-structure-card" aria-label={`${selectedStructure.name} anatomy details`}>
             <div className="atelier-structure-card-heading"><span>At a glance</span><strong>{selectedOrgan.name}</strong></div>
             <dl>

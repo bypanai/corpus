@@ -1,6 +1,6 @@
-export type ViewerAction = "reset" | "toggle-auto-rotate" | "toggle-labels" | "toggle-fullscreen" | "toggle-fade" | "toggle-isolate";
+export type ViewerAction = "reset" | "toggle-auto-rotate" | "toggle-labels" | "toggle-fullscreen" | "toggle-fade";
 
-export type FocusMode = "normal" | "fade" | "isolate";
+export type FocusMode = "normal" | "fade";
 
 export type StructureSelection = {
   id?: string;
