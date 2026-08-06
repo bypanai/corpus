@@ -4,7 +4,7 @@ import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Box3, Color, Group, Material, Mesh, Plane, Vector3 } from "three";
-import type { AnatomyOrgan } from "./organ-data";
+import { organs, type AnatomyOrgan } from "./organ-data";
 import type { FocusMode, StructureSelection } from "./types";
 
 type MaterialState = { depthWrite: boolean; opacity: number; transparent: boolean };
@@ -138,4 +138,5 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
   );
 }
 
-useGLTF.preload("/models/heart.glb", false, true);
+organs.forEach((organ) => useGLTF.preload(organ.model, false, true));
+

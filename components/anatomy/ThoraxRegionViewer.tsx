@@ -1,10 +1,10 @@
 "use client";
 
-import { Html, OrbitControls, useGLTF } from "@react-three/drei";
+import { Html, OrbitControls, PerformanceMonitor, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { Box3, Color, Group, Mesh, MeshStandardMaterial, Vector3 } from "three";
-import { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 const PARTS = [
   { id: "rib-cage", label: "Rib cage", color: "#d6c2a6" },
@@ -55,10 +55,8 @@ export function ThoraxRegionViewer() {
   const [isolated, setIsolated] = useState(false);
   const [quality, setQuality] = useState<"high" | "balanced" | "performance">("high");
   const dpr = quality === "high" ? 1.5 : quality === "balanced" ? 1.25 : 1;
-  useEffect(() => {
-    const timer = window.setTimeout(() => setQuality("balanced"), 7500);
-    return () => window.clearTimeout(timer);
-  }, []);
+  const lowerQuality = () => setQuality((q) => q === "high" ? "balanced" : "performance");
+  const raiseQuality = () => setQuality((q) => q === "performance" ? "balanced" : "high");
   const togglePart = (part: PartId) => setVisibleParts((current) => current.includes(part) ? current.filter((id) => id !== part) : [...current, part]);
   const restore = () => { setVisibleParts(PARTS.map((part) => part.id)); setIsolated(false); };
   const visibleCount = visibleParts.length;
@@ -78,6 +76,7 @@ export function ThoraxRegionViewer() {
     <div className="region-canvas-wrap">
       <span className="viewer-quality">Adaptive quality · {quality}</span>
       <Canvas dpr={dpr} shadows={quality !== "performance"} camera={{ position: [0, 0.5, 8], fov: 35 }} gl={{ antialias: quality !== "performance", powerPreference: "high-performance" }}>
+        <PerformanceMonitor flipflops={3} onDecline={lowerQuality} onIncline={raiseQuality} />
         <color attach="background" args={["#fcf7f0"]} />
         <ambientLight intensity={1.8} />
         <directionalLight castShadow={quality === "high"} intensity={2.2} position={[5, 7, 5]} shadow-mapSize={[1024, 1024]} />
