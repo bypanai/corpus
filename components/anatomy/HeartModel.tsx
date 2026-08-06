@@ -2,7 +2,7 @@
 
 import { Html, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Box3, Color, Group, Material, Mesh, Plane, Vector3 } from "three";
 import type { AnatomyOrgan } from "./organ-data";
 import type { FocusMode, StructureSelection } from "./types";
@@ -33,6 +33,7 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
   const model = useMemo(() => scene.clone(true), [scene]);
   const [selectedHotspotId, setSelectedHotspotId] = useState<string | null>(null);
   const [hoveredHotspotId, setHoveredHotspotId] = useState<string | null>(null);
+  const [hasMarkerInteraction, setHasMarkerInteraction] = useState(false);
   const [selectedNode, setSelectedNode] = useState<Mesh | null>(null);
 
   useLayoutEffect(() => {
@@ -122,40 +123,34 @@ export function AnatomyModel({ activeHotspotId, autoRotate, clippingPlane, focus
         onPointerMissed={clearSelection}
       />
       {organ.hotspots.map((hotspot) => {
-        const selected = hotspot.id === visibleHotspotId || relatedHotspotIds.includes(hotspot.id);
+        const selected = hotspot.id === visibleHotspotId;
+        const related = relatedHotspotIds.includes(hotspot.id);
         const hovered = hotspot.id === hoveredHotspotId;
-        const markerOpacity = showLabels || selected || hovered ? 1 : 0.48;
+        const labelVisible = showLabels || hovered || (hasMarkerInteraction && selected);
         return (
           <group key={hotspot.id} position={hotspot.position}>
-            <mesh
-              onPointerEnter={(event) => { event.stopPropagation(); setHoveredHotspotId(hotspot.id); }}
-              onPointerLeave={() => setHoveredHotspotId(null)}
-              onClick={(event) => {
-                event.stopPropagation();
-                const next = selected ? null : hotspot.id;
-                setSelectedHotspotId(next);
-                setSelectedNode(null);
-                onStructureSelect?.(next ? { id: hotspot.id, name: hotspot.label, detail: hotspot.detail, source: "hotspot" } : null);
-              }}
-            >
-              <sphereGeometry args={[selected || hovered ? 0.13 : 0.105, 24, 24]} />
-              <meshBasicMaterial color="white" opacity={markerOpacity} transparent toneMapped={false} />
-            </mesh>
-            <mesh scale={selected || hovered ? 0.7 : 0.55}>
-              <sphereGeometry args={[0.105, 24, 24]} />
-              <meshBasicMaterial color={hotspot.color} opacity={markerOpacity} transparent toneMapped={false} />
-            </mesh>
-            <mesh scale={selected || hovered ? 0.9 : 0.72}>
-              <ringGeometry args={[0.125, 0.15, 28]} />
-              <meshBasicMaterial color={hotspot.color} opacity={markerOpacity} transparent toneMapped={false} side={2} />
-            </mesh>
-            {(selected || hovered) && (
-              <Html center position={[0, 0.2, 0]}>
-                <span className={`anatomy-marker-label ${selected ? "selected" : ""} ${hovered ? "hovered" : ""}`}>
-                  {hotspot.label}
-                </span>
-              </Html>
-            )}
+            <Html center zIndexRange={[100, 0]}>
+              <button
+                aria-label={`Select ${hotspot.label}`}
+                aria-pressed={selected}
+                className={`anatomy-marker ${selected ? "selected" : ""} ${related ? "related" : ""} ${hovered ? "hovered" : ""}`}
+                style={{ "--marker-color": hotspot.color } as CSSProperties}
+                type="button"
+                onPointerEnter={(event) => { event.stopPropagation(); setHoveredHotspotId(hotspot.id); }}
+                onPointerLeave={() => setHoveredHotspotId(null)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  const next = selected ? null : hotspot.id;
+                  setHasMarkerInteraction(true);
+                  setSelectedHotspotId(next);
+                  setSelectedNode(null);
+                  onStructureSelect?.(next ? { id: hotspot.id, name: hotspot.label, detail: hotspot.detail, source: "hotspot" } : null);
+                }}
+              >
+                <span aria-hidden="true" />
+                <span className={`anatomy-marker-label ${labelVisible ? "visible" : ""}`}>{hotspot.label}</span>
+              </button>
+            </Html>
           </group>
         );
       })}
