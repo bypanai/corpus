@@ -1,58 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Box, Search, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { organs } from "@/components/anatomy/organ-data";
+import { PrimaryNav } from "@/components/PrimaryNav";
 
-const promises = [
-  [Box, "Explore in 3D", "Rotate, zoom, and inspect every available specimen."],
-  [Search, "Find what matters", "Search organs and systems without a maze of menus."],
-  [Sparkles, "Learn spatially", "Connect names, form, position, and function in one calm view."],
+const modes = [
+  ["01", "Library", "Nine interactive specimens. Browse by organ or system, open directly in the 3D explorer.", "/library", "Browse library →"],
+  ["02", "Guided", "Follow each organ landmark by landmark, then trace a spatial story through its physiology.", "/guide", "Start a guide →"],
+  ["03", "Regional", "Segmented models where structures can be independently hidden, isolated, and restored.", "/regions", "Open regions →"],
 ] as const;
 
-export default function Home() {
-  return (
-    <main className="min-h-screen overflow-hidden bg-[#f8f1e8] px-5 py-6 text-[#332d29] sm:px-9 lg:px-14">
-      <header className="mx-auto flex max-w-7xl items-center justify-between gap-5">
-        <Link className="font-[family-name:var(--font-serif)] text-4xl tracking-[-0.05em]" href="/">Corpus<span className="ml-1 align-top font-[family-name:var(--font-sans)] text-sm text-[#eb7c6b]">✦</span></Link>
-        <nav aria-label="Primary navigation" className="hidden items-center gap-7 text-sm text-[#675d56] md:flex"><a href="#approach">Approach</a><Link href="/library">Library</Link><Link href="/guide">Guide</Link><Link href="/anatomy">Explore</Link></nav>
-        <Link className="rounded-full border border-[#b88c76]/35 bg-white/45 px-5 py-2.5 text-sm font-medium transition hover:bg-white" href="/anatomy">Open explorer</Link>
-      </header>
-
-      <section className="relative mx-auto grid max-w-7xl gap-12 py-16 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:py-24">
-        <div className="relative z-10 max-w-2xl">
-          <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-[#a46a5f]">Free visual anatomy</p>
-          <h1 className="font-[family-name:var(--font-serif)] text-6xl leading-[.91] tracking-[-0.055em] sm:text-7xl lg:text-8xl">See anatomy<br /><em className="font-normal text-[#8d6bcc]">in its place.</em></h1>
-          <p className="mt-7 max-w-xl text-lg leading-8 text-[#625850] sm:text-xl">Corpus is a calm, interactive 3D anatomy workspace for seeing structures, their neighbours, and how the body fits together.</p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link className="inline-flex items-center gap-2 rounded-full bg-[#3f3530] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_35px_-18px_rgba(63,53,48,.8)] transition hover:-translate-y-0.5" href="/anatomy">Explore the body <ArrowRight size={16} /></Link>
-            <a className="inline-flex items-center rounded-full border border-[#b88c76]/35 bg-white/45 px-6 py-3.5 text-sm font-medium transition hover:bg-white" href="#approach">How it works</a>
-          </div>
-          <p className="mt-5 text-sm text-[#84766c]">Free to use. No ads, subscriptions, or exam prep clutter.</p>
-        </div>
-
-        <div className="relative mx-auto grid w-full max-w-md place-items-center lg:max-w-none">
-          <div className="absolute h-80 w-80 rounded-full bg-[#f4c9bb]/55 blur-3xl" />
-          <div className="relative grid h-[390px] w-full max-w-[500px] place-items-center overflow-hidden rounded-[2.2rem] border border-[#b88c76]/25 bg-[radial-gradient(circle_at_52%_38%,rgba(255,255,255,.95),rgba(255,249,241,.7)_55%,rgba(246,228,215,.75))] shadow-[0_28px_70px_-36px_rgba(87,62,43,.45)] sm:h-[470px]">
-            <div className="absolute left-7 top-7 rounded-full border border-[#b88c76]/25 bg-white/60 px-3 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#8c7463]">Interactive specimen</div>
-            <Image alt="Anatomical heart illustration" className="h-auto w-[67%] object-contain mix-blend-multiply drop-shadow-[0_28px_25px_rgba(92,47,44,.22)]" height={520} priority src="/anatomy/heart/organ.webp" width={520} />
-            <div className="absolute bottom-7 right-7 rounded-2xl border border-[#d7b4a7]/35 bg-[#fff4bf] px-4 py-3 font-[family-name:var(--font-serif)] text-sm leading-5 text-[#685345] shadow-lg">Learn form<br />before memorising.</div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl border-t border-[#b88c76]/20 py-12" aria-labelledby="available-models">
-        <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.22em] text-[#a46a5f]">Available now</p><h2 id="available-models" className="mt-2 font-[family-name:var(--font-serif)] text-4xl tracking-[-.04em]">A growing visual library.</h2></div><Link className="text-sm font-medium text-[#76574c] underline underline-offset-4" href="/library">Browse all models</Link></div>
-        <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{organs.slice(0, 5).map((organ) => <Link className="group rounded-2xl border border-[#b88c76]/20 bg-white/35 p-3 transition hover:-translate-y-0.5 hover:bg-white/60" href={`/anatomy/${organ.id}`} key={organ.id}><Image alt={`Anatomical ${organ.name.toLowerCase()} illustration`} className="aspect-square w-full rounded-xl object-cover mix-blend-multiply" height={180} src={`/anatomy/${organ.id}/thumb.webp`} width={180} /><span className="mt-3 block font-[family-name:var(--font-serif)] text-xl">{organ.name}</span><span className="mt-1 block text-xs text-[#7b6e65]">{organ.system}</span></Link>)}</div>
-      </section>
-
-      <section id="approach" className="mx-auto max-w-7xl border-t border-[#b88c76]/20 py-12 lg:py-16">
-        <p className="mb-7 text-xs font-bold uppercase tracking-[0.22em] text-[#a46a5f]">Designed for understanding</p>
-        <div className="grid gap-5 md:grid-cols-3">
-          {promises.map(([Icon, title, copy]) => <article className="rounded-3xl border border-[#b88c76]/20 bg-white/35 p-6" key={title}><Icon className="mb-8 text-[#8d6bcc]" size={22} strokeWidth={1.6} /><h2 className="font-[family-name:var(--font-serif)] text-3xl tracking-[-.03em]">{title}</h2><p className="mt-3 leading-6 text-[#6a5f57]">{copy}</p></article>)}
-        </div>
-        <p className="mt-8 max-w-2xl text-sm leading-6 text-[#746860]">Corpus is independently built as a free educational resource. Anatomy notes are cited and progressively reviewed as each structure is mapped.</p>
-      </section>
-      <section id="explore" className="sr-only">Open the interactive anatomy explorer to view currently available organs in 3D.</section>
-    </main>
-  );
-}
+export default function Home() { return <main className="min-h-screen bg-[#0a0a0f] text-[#f0eff4]"><PrimaryNav /><section className="mx-auto grid min-h-[calc(100svh-56px)] max-w-7xl items-center gap-10 px-5 py-16 sm:px-9 lg:grid-cols-[1.5fr_1fr] lg:px-14"><div><p className="mb-4 text-[11px] font-medium uppercase tracking-[.08em] text-[#4a4958]">Free visual anatomy</p><h1 className="font-[family-name:var(--font-serif)] text-[clamp(3.5rem,8vw,6.4rem)] leading-[1.05] tracking-[-.045em]">See anatomy<br /><em className="font-normal text-[#8b8a99]">in its place.</em></h1><p className="mt-6 max-w-[440px] text-[15px] font-light leading-[1.65] text-[#8b8a99]">Corpus is a calm, interactive 3D anatomy workspace for seeing structures, their neighbours, and how the body fits together.</p><div className="mt-8 flex items-center gap-4"><Link className="inline-flex items-center gap-2 rounded-full bg-[#6e9fff] px-[22px] py-[11px] text-[13px] font-semibold text-[#0a0a0f] transition hover:-translate-y-px hover:opacity-90" href="/anatomy">Explore the body <ArrowRight size={15} /></Link><a className="text-[13px] text-[#8b8a99] transition hover:text-[#f0eff4]" href="#approach">How it works ↓</a></div><p className="mt-6 text-[11px] uppercase tracking-[.06em] text-[#4a4958]">Free · No ads · Reviewed anatomy content</p></div><div className="relative grid min-h-[400px] place-items-center"><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(110,159,255,.10),transparent_70%)]" /><Image alt="Anatomical heart illustration" className="relative max-h-[500px] w-auto object-contain drop-shadow-[0_30px_45px_rgba(0,0,0,.65)]" height={620} priority src="/anatomy/heart/organ.webp" width={620} /></div></section><section className="border-y border-[#2a2a38] bg-[#111118] py-12"><div className="mx-auto max-w-7xl px-5 sm:px-9 lg:px-14"><p className="mb-8 text-center text-[11px] font-medium uppercase tracking-[.08em] text-[#4a4958]">Nine interactive specimens</p><div className="flex gap-6 overflow-x-auto pb-2 sm:justify-center">{organs.map((organ) => <Link className="flex w-[72px] shrink-0 flex-col items-center gap-2 text-center text-[11px] text-[#4a4958] transition hover:text-[#f0eff4]" href={`/anatomy?organ=${organ.id}`} key={organ.id}><Image alt="" className="h-16 w-16 rounded-full border border-[#2a2a38] bg-[#1a1a24] object-contain transition hover:border-[#6e9fff]" height={64} src={`/anatomy/${organ.id}/thumb.webp`} width={64} /><span>{organ.name}</span></Link>)}</div></div></section><section id="approach" className="mx-auto max-w-7xl px-5 py-24 sm:px-9 lg:px-14"><p className="mb-8 text-center text-[11px] font-medium uppercase tracking-[.08em] text-[#4a4958]">How Corpus works</p><div className="grid gap-6 md:grid-cols-3">{modes.map(([number, title, body, href, link]) => <article className="rounded-lg border border-[#2a2a38] bg-[#111118] p-8 transition hover:-translate-y-0.5 hover:border-[#6e9fff]/30 hover:shadow-[0_8px_32px_rgba(0,0,0,.45)]" key={title}><p className="font-mono text-[11px] text-[#6e9fff]">{number}</p><h2 className="mt-4 text-[22px] font-semibold">{title}</h2><p className="mt-3 text-[13px] font-light leading-6 text-[#8b8a99]">{body}</p><Link className="mt-7 inline-block text-[13px] font-medium text-[#6e9fff] hover:text-[#f0eff4] hover:underline" href={href}>{link}</Link></article>)}</div></section><section className="border-t border-[#2a2a38] px-5 py-24 text-center sm:px-9 lg:px-14"><h2 className="font-[family-name:var(--font-serif)] text-3xl">Learn form before memorising.</h2><p className="mx-auto mt-4 max-w-xl text-[15px] font-light leading-6 text-[#8b8a99]">Designed for understanding.</p><p className="mx-auto mt-16 max-w-xl text-[18px] font-light text-[#8b8a99]">Open the interactive anatomy explorer to view currently available organs in 3D.</p><Link className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#6e9fff] px-[22px] py-[11px] text-[13px] font-semibold text-[#0a0a0f]" href="/anatomy">Explore the body <ArrowRight size={15} /></Link></section></main>; }
