@@ -1,68 +1,58 @@
-import { Button } from "@/components/ui/button"
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Box, Search, Sparkles } from "lucide-react";
+import { organs } from "@/components/anatomy/organ-data";
+
+const promises = [
+  [Box, "Explore in 3D", "Rotate, zoom, and inspect every available specimen."],
+  [Search, "Find what matters", "Search organs and systems without a maze of menus."],
+  [Sparkles, "Learn spatially", "Connect names, form, position, and function in one calm view."],
+] as const;
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.17),_transparent_28%),radial-gradient(circle_at_80%_20%,_rgba(168,85,247,0.14),_transparent_20%),linear-gradient(180deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.95))]" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl opacity-60" />
-      <div className="pointer-events-none absolute right-0 top-1/4 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl opacity-60" />
+    <main className="min-h-screen overflow-hidden bg-[#f8f1e8] px-5 py-6 text-[#332d29] sm:px-9 lg:px-14">
+      <header className="mx-auto flex max-w-7xl items-center justify-between gap-5">
+        <Link className="font-[family-name:var(--font-serif)] text-4xl tracking-[-0.05em]" href="/">Corpus<span className="ml-1 align-top font-[family-name:var(--font-sans)] text-sm text-[#eb7c6b]">✦</span></Link>
+        <nav aria-label="Primary navigation" className="hidden items-center gap-7 text-sm text-[#675d56] md:flex"><a href="#approach">Approach</a><Link href="/library">Library</Link><Link href="/guide">Guide</Link><Link href="/anatomy">Explore</Link></nav>
+        <Link className="rounded-full border border-[#b88c76]/35 bg-white/45 px-5 py-2.5 text-sm font-medium transition hover:bg-white" href="/anatomy">Open explorer</Link>
+      </header>
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-12">
-        <header className="flex flex-wrap items-center justify-between gap-6 pb-12 text-sm text-slate-300">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-lg font-semibold text-white shadow-inner shadow-white/5">
-              C
-            </div>
-            <span className="font-medium tracking-[0.2em] uppercase text-slate-300">Corpus</span>
+      <section className="relative mx-auto grid max-w-7xl gap-12 py-16 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:py-24">
+        <div className="relative z-10 max-w-2xl">
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-[#a46a5f]">Free visual anatomy</p>
+          <h1 className="font-[family-name:var(--font-serif)] text-6xl leading-[.91] tracking-[-0.055em] sm:text-7xl lg:text-8xl">See anatomy<br /><em className="font-normal text-[#8d6bcc]">in its place.</em></h1>
+          <p className="mt-7 max-w-xl text-lg leading-8 text-[#625850] sm:text-xl">Corpus is a calm, interactive 3D anatomy workspace for seeing structures, their neighbours, and how the body fits together.</p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link className="inline-flex items-center gap-2 rounded-full bg-[#3f3530] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_16px_35px_-18px_rgba(63,53,48,.8)] transition hover:-translate-y-0.5" href="/anatomy">Explore the body <ArrowRight size={16} /></Link>
+            <a className="inline-flex items-center rounded-full border border-[#b88c76]/35 bg-white/45 px-6 py-3.5 text-sm font-medium transition hover:bg-white" href="#approach">How it works</a>
           </div>
-          <nav className="flex flex-wrap items-center gap-6 text-slate-300">
-            <a href="#" className="transition hover:text-white">Home</a>
-            <a href="#" className="transition hover:text-white">Anatomy</a>
-            <a href="#" className="transition hover:text-white">Search</a>
-            <a href="#" className="transition hover:text-white">About</a>
-          </nav>
-        </header>
+          <p className="mt-5 text-sm text-[#84766c]">Free to use. No ads, subscriptions, or exam prep clutter.</p>
+        </div>
 
-        <section className="relative flex flex-1 flex-col items-start justify-center gap-12 pb-16 lg:flex-row lg:items-center lg:gap-20">
-          <div className="max-w-2xl space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/80 px-4 py-2 text-xs uppercase tracking-[0.32em] text-slate-400 shadow-lg shadow-slate-950/30 ring-1 ring-white/5">
-              AI anatomy reimagined
-            </div>
-            <div className="space-y-6">
-              <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl">
-                Learn Human Anatomy in 3D
-              </h1>
-              <p className="max-w-xl text-lg leading-8 text-slate-300 sm:text-xl">
-                Interactive anatomy with AI, search, labels and clinical learning.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Button className="rounded-full bg-white/10 px-8 py-4 text-base font-semibold text-white shadow-[0_24px_80px_-32px_rgba(56,189,248,0.9)] transition duration-300 hover:bg-white/15 hover:-translate-y-0.5">
-                Explore Anatomy
-              </Button>
-            </div>
+        <div className="relative mx-auto grid w-full max-w-md place-items-center lg:max-w-none">
+          <div className="absolute h-80 w-80 rounded-full bg-[#f4c9bb]/55 blur-3xl" />
+          <div className="relative grid h-[390px] w-full max-w-[500px] place-items-center overflow-hidden rounded-[2.2rem] border border-[#b88c76]/25 bg-[radial-gradient(circle_at_52%_38%,rgba(255,255,255,.95),rgba(255,249,241,.7)_55%,rgba(246,228,215,.75))] shadow-[0_28px_70px_-36px_rgba(87,62,43,.45)] sm:h-[470px]">
+            <div className="absolute left-7 top-7 rounded-full border border-[#b88c76]/25 bg-white/60 px-3 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#8c7463]">Interactive specimen</div>
+            <Image alt="Anatomical heart illustration" className="h-auto w-[67%] object-contain mix-blend-multiply drop-shadow-[0_28px_25px_rgba(92,47,44,.22)]" height={520} priority src="/anatomy/heart/organ.webp" width={520} />
+            <div className="absolute bottom-7 right-7 rounded-2xl border border-[#d7b4a7]/35 bg-[#fff4bf] px-4 py-3 font-[family-name:var(--font-serif)] text-sm leading-5 text-[#685345] shadow-lg">Learn form<br />before memorising.</div>
           </div>
+        </div>
+      </section>
 
-          <div className="relative flex w-full justify-center lg:w-auto">
-            <div className="relative isolate flex h-[420px] w-[420px] items-center justify-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/80 p-6 shadow-[0_50px_120px_-40px_rgba(14,165,233,0.45)] sm:h-[480px] sm:w-[480px]">
-              <div className="absolute inset-0 rounded-[2.5rem] bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.16),_transparent_35%),radial-gradient(circle_at_80%_20%,_rgba(168,85,247,0.14),_transparent_22%)]" />
-              <div className="absolute -left-12 top-10 h-28 w-28 rounded-full bg-cyan-400/20 blur-3xl" />
-              <div className="absolute right-6 bottom-12 h-20 w-20 rounded-full bg-violet-500/20 blur-3xl" />
+      <section className="mx-auto max-w-7xl border-t border-[#b88c76]/20 py-12" aria-labelledby="available-models">
+        <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.22em] text-[#a46a5f]">Available now</p><h2 id="available-models" className="mt-2 font-[family-name:var(--font-serif)] text-4xl tracking-[-.04em]">A growing visual library.</h2></div><Link className="text-sm font-medium text-[#76574c] underline underline-offset-4" href="/library">Browse all models</Link></div>
+        <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{organs.slice(0, 5).map((organ) => <Link className="group rounded-2xl border border-[#b88c76]/20 bg-white/35 p-3 transition hover:-translate-y-0.5 hover:bg-white/60" href={`/anatomy/${organ.id}`} key={organ.id}><Image alt={`Anatomical ${organ.name.toLowerCase()} illustration`} className="aspect-square w-full rounded-xl object-cover mix-blend-multiply" height={180} src={`/anatomy/${organ.id}/thumb.webp`} width={180} /><span className="mt-3 block font-[family-name:var(--font-serif)] text-xl">{organ.name}</span><span className="mt-1 block text-xs text-[#7b6e65]">{organ.system}</span></Link>)}</div>
+      </section>
 
-              <div className="relative z-10 grid h-full w-full place-items-center">
-                <div className="relative flex h-[280px] w-[280px] items-center justify-center rounded-full border border-white/10 bg-slate-950/90 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.9)]">
-                  <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,_rgba(148,163,184,0.12),_transparent_60%)]" />
-                  <div className="flex h-48 w-48 items-center justify-center rounded-full bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 text-slate-400 shadow-lg shadow-cyan-500/10">
-                    <span className="text-sm uppercase tracking-[0.3em] text-slate-400">Anatomy Sphere</span>
-                  </div>
-                  <div className="absolute -right-10 top-8 h-12 w-12 rounded-full border border-white/10 bg-white/5 blur-sm" />
-                  <div className="absolute left-8 -bottom-10 h-16 w-16 rounded-full border border-white/10 bg-white/5 blur-sm" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+      <section id="approach" className="mx-auto max-w-7xl border-t border-[#b88c76]/20 py-12 lg:py-16">
+        <p className="mb-7 text-xs font-bold uppercase tracking-[0.22em] text-[#a46a5f]">Designed for understanding</p>
+        <div className="grid gap-5 md:grid-cols-3">
+          {promises.map(([Icon, title, copy]) => <article className="rounded-3xl border border-[#b88c76]/20 bg-white/35 p-6" key={title}><Icon className="mb-8 text-[#8d6bcc]" size={22} strokeWidth={1.6} /><h2 className="font-[family-name:var(--font-serif)] text-3xl tracking-[-.03em]">{title}</h2><p className="mt-3 leading-6 text-[#6a5f57]">{copy}</p></article>)}
+        </div>
+        <p className="mt-8 max-w-2xl text-sm leading-6 text-[#746860]">Corpus is independently built as a free educational resource. Anatomy notes are cited and progressively reviewed as each structure is mapped.</p>
+      </section>
+      <section id="explore" className="sr-only">Open the interactive anatomy explorer to view currently available organs in 3D.</section>
     </main>
   );
 }

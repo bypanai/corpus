@@ -1,0 +1,8 @@
+import { ImageResponse } from "next/og";
+
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
+
+export default function OpenGraphImage() {
+  return new ImageResponse(<div style={{ height: "100%", width: "100%", display: "flex", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #f8f1e8 0%, #fffaf4 52%, #f2e6dc 100%)", color: "#332d29", padding: "76px" }}><div style={{ position: "absolute", right: "-90px", top: "-110px", width: "560px", height: "560px", borderRadius: "999px", background: "radial-gradient(circle, rgba(241,139,120,.45), rgba(241,139,120,0) 66%)" }} /><div style={{ position: "absolute", right: "112px", bottom: "74px", width: "270px", height: "270px", border: "2px solid #d5c1e7", borderRadius: "999px" }} /><div style={{ position: "absolute", right: "188px", bottom: "148px", width: "124px", height: "124px", border: "26px solid #e97a6a", borderRightColor: "transparent", borderRadius: "999px" }} /><div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}><div style={{ display: "flex", alignItems: "center", gap: "14px", fontSize: "26px", letterSpacing: "4px", textTransform: "uppercase", color: "#a46a5f" }}>Corpus <span style={{ color: "#8d6bcc" }}>•</span> Visual anatomy</div><div style={{ display: "flex", flexDirection: "column" }}><div style={{ fontFamily: "serif", fontSize: "88px", letterSpacing: "-5px", lineHeight: 1 }}>See anatomy</div><div style={{ fontFamily: "serif", fontSize: "88px", letterSpacing: "-5px", lineHeight: 1, color: "#8d6bcc", fontStyle: "italic" }}>in its place.</div><div style={{ marginTop: "28px", fontSize: "27px", color: "#675d56" }}>Free, calm 3D anatomy for spatial understanding.</div></div></div></div>, size);
+}
