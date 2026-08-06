@@ -130,3 +130,9 @@
 }
 
 :root { --background:#f3f6fb; --foreground:#202733; --card:#ffffff; --card-foreground:#202733; --popover:#ffffff; --popover-foreground:#202733; --primary:#4f7fe8; --primary-foreground:#ffffff; --secondary:#e9eef6; --secondary-foreground:#202733; --muted:#e9eef6; --muted-foreground:#657083; --accent:#e7efff; --accent-foreground:#202733; --border:#dbe2ec; --input:#dbe2ec; --ring:#4f7fe8; --radius:.5rem; }
+
+/* Light clinical compatibility layer for remaining atlas pages. */
+[class*="bg-\\[\\#f8f1e8\\]"] { background:#f3f6fb !important; color:#202733 !important; }
+[class*="bg-white\\/"] { background:#fff !important; }
+[class*="border-\\[\\#b88c76"] { border-color:#dbe2ec !important; }
+[class*="text-\\[\\#625850\\]"],[class*="text-\\[\\#675d56\\]"],[class*="text-\\[\\#74675f\\]"] { color:#657083 !important; }

@@ -24,7 +24,7 @@ const QUALITY_TIERS: RenderQuality[] = [
 ];
 
 function ModelLoader({ organName }: { organName: string }) {
-  return <Html center><div aria-live="polite" className="rounded-2xl border border-[#b88c76]/25 bg-[#fffaf4]/95 px-5 py-4 text-center shadow-[0_14px_30px_rgba(87,62,43,.12)]"><span className="mx-auto mb-2 block h-5 w-5 animate-pulse rounded-full bg-[#ee7c6a]" /><b className="block font-[family-name:var(--font-serif)] text-lg text-[#473b35]">Loading {organName.toLowerCase()}</b><span className="mt-1 block text-xs text-[#75685e]">Preparing the interactive specimen</span></div></Html>;
+  return <Html center><div aria-live="polite" className="w-52 text-center text-[13px] font-light text-[#657083]"><span>Loading the {organName.toLowerCase()}…</span><i className="mt-3 block h-0.5 overflow-hidden bg-[#dbe2ec] after:block after:h-full after:w-1/2 after:animate-pulse after:bg-[#4f7fe8]" /></div></Html>;
 }
 
 export const Viewer = forwardRef<AnatomyViewerHandle, { activeHotspotId?: string | null; relatedHotspotIds?: string[]; organ: AnatomyOrgan; onStructureSelect?: (selection: StructureSelection | null) => void }>(function Viewer({ activeHotspotId, relatedHotspotIds, organ, onStructureSelect }, ref) {
@@ -125,14 +125,14 @@ export const Viewer = forwardRef<AnatomyViewerHandle, { activeHotspotId?: string
       <p className="sr-only" id="viewer-accessible-summary">Interactive three-dimensional model of the {organ.name}. Use the labelled viewer controls and the anatomy information panel to explore available reference points, facts, and relationships.</p>
       <div className="viewer-glow" />
       <Canvas style={{ inset: 0, position: "absolute" }} shadows={renderQuality.tier !== "performance" ? "basic" : false} dpr={renderQuality.dpr} gl={{ alpha: true, antialias: true, powerPreference: "high-performance", localClippingEnabled: true }}>
-        <color attach="background" args={["#faf4ec"]} />
+        <color attach="background" args={["#f8faff"]} />
         <PerformanceMonitor flipflops={3} onDecline={lowerRenderQuality} onIncline={raiseRenderQuality} />
         <PerspectiveCamera makeDefault fov={34} position={HOME_CAMERA} />
         <ViewerLights />
         <Suspense fallback={<ModelLoader organName={organ.name} />}>
           <AnatomyModel key={`${organ.id}-${resetToken}`} activeHotspotId={activeHotspotId} clippingPlane={clippingPlane} focusMode={focusMode} relatedHotspotIds={relatedHotspotIds} organ={organ} autoRotate={autoRotate} showLabels={showLabels} onStructureSelect={handleStructureSelection} />
         </Suspense>
-        <mesh receiveShadow position={[0, -2.5, 0]}><cylinderGeometry args={[2.3, 2.48, 0.34, 56]} /><meshStandardMaterial color="#e8d6c3" roughness={0.78} /></mesh>
+        <mesh receiveShadow position={[0, -2.5, 0]}><cylinderGeometry args={[2.3, 2.48, 0.34, 56]} /><meshStandardMaterial color="#e4e9f1" roughness={0.78} /></mesh>
         <ViewerCamera controlsRef={controlsRef} onStart={() => { if (autoRotate) { setAutoRotate(false); setStatus("Auto-rotation paused while you explore."); } }} />
       </Canvas>
       <div className="viewer-tools" aria-label="3D viewer tools">

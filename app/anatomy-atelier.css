@@ -40,3 +40,57 @@
 @media (max-width:760px) { .viewer-section-panel { left:74px; width:190px; } }
 @media (max-width:900px) { .region-viewer-shell { grid-template-columns:1fr; min-height:0; } .region-viewer-copy { padding:28px; } .region-canvas-wrap { min-height:500px; } }
 @media (prefers-reduced-motion:reduce) { .auto-rotate { display:none; } }
+
+/* Corpus light clinical theme */
+.atelier-shell { --ink:#202733; --muted:#657083; --paper:#fff; --line:#dbe2ec; --coral:#4f7fe8; --lavender:#4f7fe8; background:#f3f6fb; color:#202733; }
+.atelier-topbar { border-bottom:1px solid #dbe2ec; }
+.atelier-brand em { color:#657083; font-style:normal; }
+.atelier-nav a { color:#657083; }
+.atelier-nav .active { background:#e7efff; color:#4f7fe8; box-shadow:inset 0 0 0 1px rgba(79,127,232,.2); }
+.atelier-search,.atelier-share-controls>button,.atelier-model-count { border-color:#dbe2ec; background:rgba(255,255,255,.88); color:#657083; }
+.atelier-command-results,.atelier-bookmarks { border-color:#dbe2ec; background:#fff; box-shadow:0 18px 38px rgba(67,92,128,.14); }
+.atelier-workspace>aside,.anatomy-viewer,.atelier-info,.atelier-library { border-color:#dbe2ec; background:#fff; border-radius:12px; box-shadow:0 12px 36px rgba(67,92,128,.08); }
+.atelier-library-explorer { border-color:#dbe2ec; background:#f7f9fc; }
+.atelier-library-explorer [role="tablist"] { background:#e9eef6; }
+.atelier-library-explorer [role="tab"],.atelier-library-explorer label span { color:#657083; }
+.atelier-library-explorer [role="tab"].active { background:#fff; color:#202733; box-shadow:0 1px 5px rgba(67,92,128,.12); }
+.atelier-library-explorer select,.atelier-view-all { border-color:#dbe2ec; background:#fff; color:#202733; }
+.atelier-organ.active { border-color:rgba(79,127,232,.35); background:#eef4ff; }
+.atelier-organ b,.atelier-title h1,.atelier-info h2 { color:#202733; }
+.atelier-organ small,.atelier-description,.atelier-facts dd,.atelier-content-status { color:#657083; }
+.anatomy-viewer { background:radial-gradient(ellipse at 52% 46%,rgba(79,127,232,.10),transparent 58%),#f8faff; }
+.viewer-glow { background:radial-gradient(circle,rgba(79,127,232,.10),transparent 68%); }
+.viewer-tools { left:50%; top:auto; bottom:18px; width:auto; transform:translateX(-50%); flex-direction:row; border-color:#dbe2ec; border-radius:12px; background:rgba(255,255,255,.88); backdrop-filter:blur(12px); box-shadow:0 8px 24px rgba(67,92,128,.12); }
+.viewer-tools button { min-width:44px; color:#657083; }
+.viewer-tools button.active { color:#4f7fe8; background:#e7efff; }
+.viewer-tools small { display:none; }
+.viewer-caption { color:#8792a5; }
+.viewer-caption strong { color:#657083; font-style:normal; }
+.auto-rotate { border-color:#dbe2ec; background:rgba(255,255,255,.9); color:#657083; }
+.auto-rotate i.on { background:#4f7fe8; }
+.viewer-status { background:rgba(255,255,255,.9); color:#657083; }
+.atelier-content-badges span:first-child { border:0; background:transparent; color:#3f9b72; }
+.atelier-segmented-link { border-color:rgba(79,127,232,.25); background:#eef4ff; color:#4f7fe8; }
+.atelier-guide,.atelier-story,.atelier-relationships,.atelier-structure-card,.atelier-clinical-focus { border-color:#dbe2ec; background:#f7f9fc; border-radius:8px; }
+.atelier-note.medical { border-color:#dbe2ec; background:#f7f9fc; }
+.anatomy-marker { border-color:#4f7fe8; background:#fff; box-shadow:0 3px 12px rgba(67,92,128,.22); }
+.anatomy-marker-label { border-color:#dbe2ec; border-radius:4px; background:rgba(255,255,255,.96); color:#202733; font-family:var(--font-mono),monospace; box-shadow:0 6px 16px rgba(67,92,128,.13); }
+.region-page { background:#f3f6fb; }
+.region-viewer-copy,.region-canvas-wrap { border-color:#dbe2ec; border-radius:12px; background:#fff; box-shadow:0 12px 36px rgba(67,92,128,.08); }
+.region-viewer-copy>p:not(.atelier-kicker) { color:#657083; font-family:var(--font-sans),sans-serif; }
+.region-part-controls button { border-color:#dbe2ec; background:#f7f9fc; color:#657083; font-family:var(--font-sans),sans-serif; }
+.region-part-controls button.active { border-color:rgba(79,127,232,.35); background:#e7efff; color:#202733; }
+.region-actions button { border-color:#dbe2ec; background:#fff; color:#657083; }
+.region-actions button:first-child { background:#4f7fe8; color:#fff; }
+.region-attribution,.region-viewer-caption { color:#8792a5!important; }
+.region-attribution a { color:#4f7fe8; }
+.region-canvas-wrap { background:radial-gradient(circle at 52% 43%,rgba(79,127,232,.10),#f8faff 68%); }
+@media(max-width:760px){.viewer-tools{bottom:58px;max-width:calc(100% - 24px);overflow-x:auto}.viewer-caption{bottom:18px}.atelier-info{border-radius:12px}}
+@media (min-width:761px) and (max-width:1160px) {
+  .atelier-topbar { height:auto; grid-template-columns:minmax(190px,1fr) auto; padding-bottom:10px; }
+  .atelier-brand { grid-column:1; grid-row:1; }
+  .atelier-nav { grid-column:2; grid-row:1; }
+  .atelier-commandbar { grid-column:1; grid-row:2; justify-self:stretch; width:min(100%,390px); }
+  .atelier-share-controls { grid-column:2; grid-row:2; justify-self:end; }
+  .atelier-model-count { display:none; }
+}
